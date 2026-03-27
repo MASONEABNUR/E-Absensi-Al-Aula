@@ -2,37 +2,87 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menghubungkan...</title>
-    <meta http-equiv="refresh" content="0; URL='https://script.google.com/macros/s/AKfycbxIO_NdzCdWuQ_DURzho-TYqxBRnPbIOil-hiPIV8bsO32HjY5XysPPCJqR-GLhOJ_S9Q/exec'" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aplikasi Saya</title>
     <style>
-        body {
+        /* Reset & Base Style */
+        body, html {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f0f4f2; /* Sage Light */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Iframe Container */
+        .app-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f1f8e9; /* Light Sage Green */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            z-index: 1;
         }
-        .loader-container {
-            text-align: center;
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e1e8e5;
+            border-top: 4px solid #50C878; /* Emerald Green */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
         }
-        .text {
-            color: #2e7d32; /* Emerald Green */
-            font-size: 1.1rem;
-            font-weight: 500;
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #2e4a3e;
+            font-size: 14px;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
-    <div class="loader-container">
-        <p class="text">Tunggu sebentar, sedang mengalihkan...</p>
+
+    <div class="loading-screen">
+        <div class="spinner"></div>
+        <div class="loading-text">MEMUAT SISTEM...</div>
     </div>
-    <script>
-        // Backup jika meta refresh tidak jalan di browser tertentu
-        window.location.href = "https://script.google.com/macros/s/AKfycbxIO_NdzCdWuQ_DURzho-TYqxBRnPbIOil-hiPIV8bsO32HjY5XysPPCJqR-GLhOJ_S9Q/exec";
-    </script>
+
+    <div class="app-container">
+        <iframe 
+            src="https://script.google.com/macros/s/AKfycbzysoJ1Lx3c9nF7-T41u9iaIL9e0XtCu16wN4IIzUmIPYFm1QI46ZzqoItY7FannkX0Xg/exec" 
+            allow="geolocation; camera; microphone; fullscreen" 
+            allowfullscreen="true">
+        </iframe>
+    </div>
+
 </body>
 </html>
