@@ -44,7 +44,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1;
+            z-index: 10; /* Di atas segalanya saat awal */
+            transition: opacity 0.5s ease, visibility 0.5s;
         }
 
         .spinner {
@@ -66,23 +67,146 @@
             color: #2e4a3e;
             font-size: 14px;
             letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        /* Modern Notification (Toast) Styles */
+        #notification-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            width: 90%;
+            max-width: 400px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: #ffffff;
+            color: #2e4a3e;
+            padding: 16px 20px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 5px solid #50C878;
+            pointer-events: auto;
+            
+            /* Animasi masuk */
+            animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .toast.fade-out {
+            animation: slideOut 0.4s ease forwards;
+        }
+
+        @keyframes slideOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-20px); opacity: 0; }
+        }
+
+        .toast-icon {
+            background: #e8f5ed;
+            color: #50C878;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        .toast-message {
+            flex-grow: 1;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+            margin-left: 5px;
         }
     </style>
 </head>
 <body>
 
-    <div class="loading-screen">
+    <!-- Container untuk Notifikasi -->
+    <div id="notification-container"></div>
+
+    <div class="loading-screen" id="loader">
         <div class="spinner"></div>
         <div class="loading-text">MEMUAT SISTEM...</div>
     </div>
 
     <div class="app-container">
         <iframe 
+            id="app-frame"
             src="https://script.google.com/macros/s/AKfycbzysoJ1Lx3c9nF7-T41u9iaIL9e0XtCu16wN4IIzUmIPYFm1QI46ZzqoItY7FannkX0Xg/exec" 
             allow="geolocation; camera; microphone; fullscreen" 
             allowfullscreen="true">
         </iframe>
     </div>
+
+    <script>
+        // Fungsi untuk menampilkan notifikasi modern
+        function showToast(message, duration = 4000) {
+            const container = document.getElementById('notification-container');
+            
+            // Buat elemen toast
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            toast.innerHTML = `
+                <div class="toast-icon">✓</div>
+                <div class="toast-message">${message}</div>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            `;
+
+            container.appendChild(toast);
+
+            // Hilangkan otomatis setelah durasi tertentu
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                setTimeout(() => {
+                    if(toast.parentElement) toast.remove();
+                }, 400);
+            }, duration);
+        }
+
+        // Simulasi Menghilangkan Loader & Memberi Notifikasi saat Siap
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            
+            // Beri sedikit jeda agar transisi terasa halus
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+                
+                // Panggil notifikasi modern alih-alih alert()
+                showToast("Sistem berhasil dimuat. Selamat bekerja!");
+            }, 1500);
+        });
+
+        // Contoh cara penggunaan di masa depan:
+        // Jika Anda ingin memanggil notifikasi dari dalam iframe atau event lain, 
+        // cukup panggil: showToast("Pesan Anda di sini");
+    </script>
 
 </body>
 </html>
